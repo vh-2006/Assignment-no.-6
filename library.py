@@ -1,5 +1,6 @@
 from book import search_book, issued_books
 
+
 def issue_book(book_id, student_id):
     book = search_book(book_id)
     if book is None or not str(student_id).strip():
@@ -10,6 +11,7 @@ def issue_book(book_id, student_id):
     book["available"] -= 1
     issued_books.setdefault(str(student_id), []).append(str(book_id))
     return True
+
 
 def return_book(book_id, student_id):
     book = search_book(book_id)

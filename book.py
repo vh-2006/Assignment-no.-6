@@ -1,6 +1,7 @@
 books = []
 issued_books = {}
 
+
 def add_book(book_id, title, author, copies=1):
     if not str(book_id).strip() or not title.strip() or not author.strip():
         return False
@@ -18,6 +19,7 @@ def add_book(book_id, title, author, copies=1):
     }
     books.append(book)
     return True
+
 
 def search_book(book_id):
     for book in books:
