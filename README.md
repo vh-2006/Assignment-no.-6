@@ -16,3 +16,4 @@ GitHub Actions workflow: `.github/workflows/ci-cd.yml`
 
 The workflow runs automatically on every push and pull request to the repository's default branch. It prepares/builds the Python modules, runs the automated tests, performs Flake8 source analysis, and uploads test and coverage reports as workflow artifacts.
 CI/CD pipeline verified successfully.
+Pull request CI/CD verification.
