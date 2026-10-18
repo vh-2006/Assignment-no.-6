@@ -1,0 +1,60 @@
+name: Library Management System CI/CD
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ci-cd:
+    name: Build, Test, Analysis and Reporting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Build - Install dependencies and compile Python files
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m compileall -q book.py library.py
+
+      - name: Test - Run unit and integration tests
+        run: |
+          python -m pytest -v \
+            --junitxml=test-results.xml \
+            --cov=book \
+            --cov=library \
+            --cov-report=term-missing \
+            --cov-report=xml:coverage.xml
+
+      - name: Analysis - Run Flake8 code quality checks
+        if: always()
+        run: |
+          flake8 book.py library.py test_book.py test_library.py test_integration.py \
+            --count --statistics --exit-zero > flake8-report.txt
+          cat flake8-report.txt
+
+      - name: Reporting - Upload test and quality reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: library-management-ci-reports
+          path: |
+            test-results.xml
+            coverage.xml
+            flake8-report.txt
+          if-no-files-found: warn
+          retention-days: 14
